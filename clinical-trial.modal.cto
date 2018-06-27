@@ -1,0 +1,109 @@
+namespace org.acme.ClinicalTrial
+
+participant Company identified by companyId {
+	o String companyId
+	o String companyName
+	o String companyDescription
+	o String companyAddress
+	o String manufacturingFacilitiesAddress
+	o String regulatoryStatus
+	o String intellectualStatus
+	o String patentInformation
+}
+
+abstract participant User identified by userId {
+    o String userId
+    o String firstName
+    o String lastName
+    o Integer age
+}
+
+participant Volunteer extends User {
+	o Boolean consentGiven default = false
+	o Boolean isPlaceboPatient default = false
+	o String diseaseSufferingFrom
+}
+
+participant Investigator extends User {
+
+}
+
+asset Drug identified by drugId {
+	o String drugId
+	--> Company companyId
+	--> Investigator investigator
+	o String drugName
+	o String drugDescription
+	o String productDevelopment
+	o String strainDetails
+	o String drugSubstance
+	o String drugProduct
+	o Boolean isApproved default = false
+	o Boolean isRegistered default = false
+	o Protocol protocol
+	o PhaseOne p1 optional
+	o PhaseTwo p2 optional
+	o PhaseThree p3 optional
+}
+
+concept Protocol {
+	o String protocolDescription
+	o String data // it may contain protocol document ** To use IPFS **
+}
+
+concept PhaseOne {
+	o DateTime startdate default = ""
+	o DateTime enddate default = ""
+	--> Volunteer[] volunteers
+	o String purpose default = "" 
+	o Boolean isSuccess default = false
+	o Double dosage default = 0.0
+}
+
+concept PhaseTwo {
+	o DateTime startdate default = ""
+	o DateTime enddate default = ""
+	--> Volunteer[] volunteers
+	o String purpose default = "" 
+	o Boolean isSuccess default = false
+	o Double dosage default = 0.0
+}
+
+concept PhaseThree {
+	o DateTime startdate default = ""
+	o DateTime enddate default = ""
+	--> Volunteer[] volunteers
+	o String purpose default = "" 
+	o Boolean isSuccess default = false
+	o Double dosage default = 0.0
+}
+
+transaction PhaseOneTrail {
+  --> Drug drug
+  o DateTime startdate
+  o DateTime enddate
+  --> Volunteer[] volunteers
+  o String purpose
+  o Double dosage default = 0.0
+}
+
+transaction PhaseTwoTrail {
+  --> Drug drug
+  o DateTime startdate
+  o DateTime enddate
+  --> Volunteer[] volunteers
+  o String purpose
+  o Double dosage default = 0.0
+}
+
+transaction PhaseThreeTrail {
+  --> Drug drug
+  o DateTime startdate
+  o DateTime enddate
+  --> Volunteer[] volunteers
+  o String purpose
+  o Double dosage default = 0.0
+}
+
+ transaction SetupDemo {
+ }
